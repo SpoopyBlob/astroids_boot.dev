@@ -36,19 +36,27 @@ class Spaceship_Main(pygame.sprite.Sprite):
         for s in self.s_draw:
             for obj in group:
                 if s.collision(obj):
+                    if obj.__class__.__name__ == "Powerup_Asteroid":
+                        if s in self.players:
+                            collisions.append((s, "powerup"))
+                            continue
                     collisions.append(s)
 
         return collisions
 
     def handle_collisions(self, col_list):
         for obj in col_list:
-            obj.collision_handle()
+            if type(obj) == tuple and obj[1] == "powerup":
+                obj[0].power_up_collision()
+            else:
+                obj.collision_handle()
 
-    def check_internal_collisions(self):
-        for s in self.s_draw:
-            for s_2 in self.s_draw:
-                if s.collision(s_2):
-                    s.collision_handle()
+    def player_alive(self):
+        if self.player_one in self.players:
+            return True
+        return False
+
+
 
 
         

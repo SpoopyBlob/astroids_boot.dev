@@ -30,6 +30,7 @@ class Asteroid_Main(pygame.sprite.Sprite):
             obj.draw(screen)
 
     def get_collidables(self):
+        
         return self.a_draw
 
 
@@ -41,6 +42,7 @@ class Asteroid_Main(pygame.sprite.Sprite):
                 if a.collision(obj):
                     collisions.append(a)
 
+
         return collisions
 
     def check_internal_collisions(self):
@@ -50,7 +52,6 @@ class Asteroid_Main(pygame.sprite.Sprite):
             for a_2 in self.a_draw:
                 if a != a_2:
                     if a.collision(a_2):
-
                     #stops duplicates due to nested loop
                         if (a_2, a) in collision_pairs:
                             continue
@@ -62,13 +63,10 @@ class Asteroid_Main(pygame.sprite.Sprite):
     def handle_collisions(self, col_list):
 
         for obj in col_list:
-            
             #if tuple, meaning we are handling internal collisions
             if type(obj) == tuple:
-                
                 obj[0].internal_collision_handle(obj[1])
                 continue
-
             #else we are handling external collisions
             obj.collision_handle()
 

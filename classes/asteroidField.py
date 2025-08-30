@@ -1,6 +1,7 @@
 import pygame
 import random
 from classes.asteroid import Asteroid
+from classes.powerup_asteroid import Powerup_Asteroid
 from classes.constants import *
 
 
@@ -33,7 +34,12 @@ class AsteroidField(pygame.sprite.Sprite):
         self.spawn_timer = 0.0
 
     def spawn(self, radius, position, velocity):
-        asteroid = Asteroid(position.x, position.y, radius)
+        n = random.randint(0, 100)
+        if n in range(10):
+            asteroid = Powerup_Asteroid(position.x, position.y)
+        else:
+            asteroid = Asteroid(position.x, position.y, radius)
+
         asteroid.velocity = velocity
 
     def update(self, dt):

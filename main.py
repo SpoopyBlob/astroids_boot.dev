@@ -43,6 +43,10 @@ def main():
         asteroid_main.handle_collisions(a_collisions)
         spaceship_main.handle_collisions(s_collisions)
 
+        if not spaceship_main.player_alive():
+            print("Game Over")
+            return
+
         pygame.display.flip()
 
         dt = clock.tick(60) / 1000

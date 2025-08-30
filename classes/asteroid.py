@@ -13,12 +13,15 @@ class Asteroid(CircleShape):
         pygame.draw.circle(screen, "white", self.position, self.radius, 2)
 
     def update(self, dt):
+        super().update(dt)
+        
         self.position += (self.velocity * dt)
+        #timer for collision_exception
         if self.collision_exception > 0: 
             self.collision_exception -= dt
 
-    def collision_handle(self):
         
+    def collision_handle(self):
         super().collision_handle()
 
         if self.radius <= ASTEROID_MIN_RADIUS:
