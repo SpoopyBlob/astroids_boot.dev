@@ -1,9 +1,8 @@
 import pygame
-from constants import *
-from player import Player
-from asteroid import Asteroid
-from asteroidField import AsteroidField
-from shot import Shot
+from classes.constants import *
+from asteroid_main import Asteroid_Main
+from spaceship_main import Spaceship_Main
+
 
 def main():
     pygame.init()
@@ -11,37 +10,38 @@ def main():
     clock = pygame.time.Clock()
     dt = 0
 
-    updatable = pygame.sprite.Group()
-    drawable = pygame.sprite.Group()
-    asteroids = pygame.sprite.Group()
+    controllers = pygame.sprite.Group()
 
-
-    Player.containers = (updatable, drawable)
-    Asteroid.containers = (updatable, drawable, asteroids)
-    AsteroidField.containers = (updatable)
-    Shot.containers = (updatable, drawable)
-    
+    Spaceship_Main.containers = (controllers)
+    Asteroid_Main.containers = (controllers)
     
 
-    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
-    astro_field = AsteroidField()
-
+    spaceship_main = Spaceship_Main()
+    asteroid_main = Asteroid_Main()
+  
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
         
-        updatable.update(dt)
+        controllers.update(dt)
 
         pygame.Surface.fill(screen, (0,0,0))
         
-        for sprite in drawable:
-            sprite.draw(screen)
+        for obj in controllers:
+            obj.draw(screen)
 
-        for asteroid in asteroids:
-            if player.collision(asteroid):
-                print("Game over!")
-                return
+        #retrieve collidables
+        asteroid_collidables = asteroid_main.get_collidables()
+        spaceship_collidables = spaceship_main.get_collidables()
+
+        #check for objects colliding and return collisions list
+        a_collisions = asteroid_main.check_collision_against(spaceship_collidables)
+        s_collisions = spaceship_main.check_collision_against(asteroid_collidables)
+
+        #handle collisions
+        asteroid_main.handle_collisions(a_collisions)
+        spaceship_main.handle_collisions(s_collisions)
 
         pygame.display.flip()
 

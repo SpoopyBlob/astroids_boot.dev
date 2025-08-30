@@ -23,4 +23,7 @@ class CircleShape(pygame.sprite.Sprite):
     def collision(self, circle):
         #circle represents another object (asteroid/player?) Gonna add feature where collisions between asteroids will bounce of each other
         return True if pygame.Vector2.distance_to(self.position, circle.position) <= self.radius + circle.radius else False
-
+    
+    #handles external
+    def collision_handle(self):
+        self.kill()
