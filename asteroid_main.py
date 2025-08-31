@@ -1,5 +1,6 @@
 from classes.asteroid import Asteroid
 from classes.asteroidField import AsteroidField
+from classes.transforming_asteroid import Transforming_Asteroid
 import pygame
 
 class Asteroid_Main(pygame.sprite.Sprite):
@@ -9,6 +10,7 @@ class Asteroid_Main(pygame.sprite.Sprite):
         else:
             super().__init__()
 
+        self.asteroid_to_transform = []
         self.a_update = pygame.sprite.Group()
         self.a_draw = pygame.sprite.Group()
     
@@ -66,8 +68,39 @@ class Asteroid_Main(pygame.sprite.Sprite):
             #if tuple, meaning we are handling internal collisions
             if type(obj) == tuple:
                 obj[0].internal_collision_handle(obj[1])
-                continue
+                for i in obj:
+                    #checks collision status of transforming_asteroid after internal collision
+                    if i.__class__.__name__ == "Transforming_Asteroid":
+                        self.check_transformation_status(i)
+
             #else we are handling external collisions
-            obj.collision_handle()
+            else:
+                #edge case: transforming_asteroids lose health
+                if obj.__class__.__name__ == "Transforming_Asteroid":
+                    obj.external_collision()
+                else:
+                    obj.collision_handle()
+
+    #checks if a transforming asteroid is ready to transform
+    def check_transformation_status(self, obj):
+        if obj.collisions_till_transformation <= 0:
+            self.asteroid_to_transform.append(obj.position)
+            obj.kill()
+            self.transformation_event(obj)
+
+    #getter method for main to transfer information between asteroid_main and spaceship_main
+    def get_asteroid_to_transform(self):
+        return_asteroids = self.asteroid_to_transform.copy()
+        self.asteroid_to_transform = []
+        return return_asteroids
+
+    def transformation_event(self, event_obj):
+        for asteroid in self.a_draw:
+            asteroid.angle_to_event(event_obj)
+        
+
+
+
+
 
     

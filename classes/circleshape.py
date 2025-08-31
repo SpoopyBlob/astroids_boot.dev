@@ -22,14 +22,8 @@ class CircleShape(pygame.sprite.Sprite):
         pass
 
     def update(self, dt):
-        self.off_screen = self.check_if_off_screen()
-
-        if self.despawn_timer <= 0:
-            self.kill()
-        if self.off_screen:
-            self.despawn_timer -= dt
-        else:
-            self.off_screen = 5
+        self.despawn_check(dt)
+        self.position += (self.velocity * dt)
         
     def collision(self, circle):
         #circle represents another object (asteroid/player?) Gonna add feature where collisions between asteroids will bounce of each other
@@ -49,3 +43,13 @@ class CircleShape(pygame.sprite.Sprite):
             return True
 
         return False
+
+    def despawn_check(self, dt):
+        self.off_screen = self.check_if_off_screen()
+        
+        if self.despawn_timer <= 0:
+            self.kill()
+        if self.off_screen:
+            self.despawn_timer -= dt
+        else:
+            self.off_screen = 5

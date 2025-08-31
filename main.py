@@ -43,6 +43,12 @@ def main():
         asteroid_main.handle_collisions(a_collisions)
         spaceship_main.handle_collisions(s_collisions)
 
+        #spawns enemy ship when asteroid transforms
+        new_enemy = asteroid_main.get_asteroid_to_transform()
+        if len(new_enemy) > 0:
+            for enemy in new_enemy:
+                e = spaceship_main.spawn_enemy_ship(enemy)
+
         if not spaceship_main.player_alive():
             print("Game Over")
             return

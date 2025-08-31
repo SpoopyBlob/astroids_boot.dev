@@ -2,6 +2,7 @@ import pygame
 import random
 from classes.asteroid import Asteroid
 from classes.powerup_asteroid import Powerup_Asteroid
+from classes.transforming_asteroid import Transforming_Asteroid
 from classes.constants import *
 
 
@@ -35,8 +36,14 @@ class AsteroidField(pygame.sprite.Sprite):
 
     def spawn(self, radius, position, velocity):
         n = random.randint(0, 100)
+        
+        #10% chance of spawning
         if n in range(10):
             asteroid = Powerup_Asteroid(position.x, position.y)
+        #4% chance of spawning
+        elif n in range(80, 95):
+            asteroid = Transforming_Asteroid(position.x, position.y)
+        #86% chance of spawning
         else:
             asteroid = Asteroid(position.x, position.y, radius)
 
